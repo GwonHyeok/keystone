@@ -14,9 +14,15 @@ module.exports = Field.create({
 		}
 	},
 	renderField () {
+		var props = {
+			name: this.props.path,
+		};
+
+		if (this.props.nested) props.name = this.props.nested + '.' + props.name + '_' + this.props._id;
+
 		return (
 			<FormInput
-				name={this.props.path}
+				name={props.name}
 				ref="focusTarget"
 				value={this.props.value}
 				onChange={this.valueChanged}

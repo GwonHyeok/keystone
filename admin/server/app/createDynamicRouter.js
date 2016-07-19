@@ -24,6 +24,9 @@ module.exports = function createDynamicRouter (keystone) {
 	router.use('/api', require('../middleware/apiError'));
 	router.use('/api', require('../middleware/logError'));
 
+	// MiddleWare
+	const ComplexFieldParser = require('../middleware/complexFieldParser');
+
 	// #1: Session API
 	// TODO: this should respect keystone auth options
 	router.get('/api/session', require('../api/session/get'));
@@ -69,8 +72,8 @@ module.exports = function createDynamicRouter (keystone) {
 	var initList = require('../middleware/initList')(keystone);
 
 	// Legacy API endpoints
-	router.post('/api/legacy/:list/create', initList, require('../api/list/legacyCreate'));
-	router.post('/api/legacy/:list/:id', initList, require('../api/item/legacyUpdate'));
+	router.post('/api/legacy/:list/create', initList, ComplexFieldParser, require('../api/list/legacyCreate'));
+	router.post('/api/legacy/:list/:id', initList, ComplexFieldParser, require('../api/item/legacyUpdate'));
 
 	// lists
 	router.all('/api/counts', require('../api/counts'));
@@ -87,7 +90,7 @@ module.exports = function createDynamicRouter (keystone) {
 
 	// #6: List Routes
 	router.all('/:list/:page([0-9]{1,5})?', IndexRoute);
-	router.all('/:list/:item', IndexRoute);
+	router.all('/:list/:item', ComplexFieldParser, IndexRoute);
 
 	// TODO: catch 404s and errors with Admin-UI specific handlers
 

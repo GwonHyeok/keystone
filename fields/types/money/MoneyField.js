@@ -16,7 +16,13 @@ module.exports = Field.create({
 	},
 
 	renderField () {
-		return <FormInput name={this.props.path} ref="focusTarget" value={this.props.value} onChange={this.valueChanged} autoComplete="off" />;
+		var props = {
+			name: this.props.path,
+		};
+
+		if (this.props.nested) props.name = this.props.nested + '.' + props.name + '_' + this.props._id;
+
+		return <FormInput name={props.name} ref="focusTarget" value={this.props.value} onChange={this.valueChanged} autoComplete="off" />;
 	},
 
 });

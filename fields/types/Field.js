@@ -63,6 +63,9 @@ var Base = module.exports.Base = {
 			ref: 'focusTarget',
 			value: this.props.value,
 		});
+
+		if (this.props.nested) props.name = this.props.nested + '.' + props.name + '_' + this.props._id;
+
 		return <FormInput {...props} />;
 	},
 	renderValue () {
@@ -76,6 +79,7 @@ var Base = module.exports.Base = {
 		);
 		return (
 			<FormField label={this.props.label} className={wrapperClassName} htmlFor={this.props.path}>
+				{ this.renderMirror() }
 				<div className={'FormField__inner field-size-' + this.props.size}>
 					{this.shouldRenderField() ? this.renderField() : this.renderValue()}
 				</div>
@@ -83,6 +87,13 @@ var Base = module.exports.Base = {
 			</FormField>
 		);
 	},
+	renderMirror() {
+		if (!this.props.mirrored) return;
+
+		var inputName = this.props.path;
+		if (this.props.nested) inputName = this.props.nested + '.' + inputName + '_' + this.props._id;
+		return <input type="hidden" name={ inputName } value={ this.props.value }/>
+	}
 };
 
 var Mixins = module.exports.Mixins = {
