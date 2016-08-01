@@ -1,5 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import assign from 'object-assign';
+
 import Popout from '../../../shared/Popout';
 import PopoutList from '../../../shared/Popout/PopoutList';
 import { Button, InputGroup, FormField, FormInput } from 'elemental';
@@ -29,14 +30,10 @@ var ListColumnsForm = React.createClass({
 			selectedColumns: this.getSelectedColumnsFromStore(),
 			isOpen: visible,
 			searchString: '',
-		}, () => {
-			if (visible) {
-				ReactDOM.findDOMNode(this.refs.search).focus();
-			}
 		});
 	},
 	toggleColumn (path, value) {
-		const newColumns = Object.assign({}, this.state.selectedColumns);
+		const newColumns = assign({}, this.state.selectedColumns);
 
 		if (value) {
 			newColumns[path] = value;
@@ -88,7 +85,7 @@ var ListColumnsForm = React.createClass({
 	render () {
 		return (
 			<InputGroup.Section className={this.props.className}>
-				<Button ref="target" id="listHeaderColumnButton" isActive={this.state.isOpen} onClick={() => this.togglePopout(!this.state.isOpen)}>
+				<Button id="listHeaderColumnButton" isActive={this.state.isOpen} onClick={() => this.togglePopout(!this.state.isOpen)}>
 					<span className={this.props.className + '__icon octicon octicon-list-unordered'} />
 					<span className={this.props.className + '__label'}>Columns</span>
 					<span className="disclosure-arrow" />
@@ -97,7 +94,7 @@ var ListColumnsForm = React.createClass({
 					<Popout.Header title="Columns" />
 					<Popout.Body scrollable>
 						<FormField style={{ borderBottom: '1px dashed rgba(0,0,0,0.1)', paddingBottom: '1em' }}>
-							<FormInput ref="search" value={this.state.searchString} onChange={this.updateSearch} placeholder="Find a column..." />
+							<FormInput autoFocus value={this.state.searchString} onChange={this.updateSearch} placeholder="Find a column..." />
 						</FormField>
 						<PopoutList>
 							{this.renderColumns()}

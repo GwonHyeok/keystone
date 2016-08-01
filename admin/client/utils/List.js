@@ -6,6 +6,7 @@
 const listToArray = require('list-to-array');
 const qs = require('qs');
 const xhr = require('xhr');
+const assign = require('object-assign');
 // Filters for truthy elements in an array
 const truthy = (i) => i;
 
@@ -63,7 +64,7 @@ function buildQueryString (options) {
 	const query = {};
 	if (options.search) query.search = options.search;
 	if (options.filters.length) query.filters = JSON.stringify(getFilters(options.filters));
-	if (options.columns) query.select = options.columns.map(i => i.path).join(',');
+	if (options.columns) query.fields = options.columns.map(i => i.path).join(',');
 	if (options.page && options.page.size) query.limit = options.page.size;
 	if (options.page && options.page.index > 1) query.skip = (options.page.index - 1) * options.page.size;
 	if (options.sort) query.sort = getSortString(options.sort);
@@ -78,7 +79,7 @@ function buildQueryString (options) {
  */
 const List = function (options) {
 	// TODO these options are possibly unused
-	Object.assign(this, options);
+	assign(this, options);
 	this.columns = getColumns(this);
 	this.expandedDefaultColumns = this.expandColumns(this.defaultColumns);
 	this.defaultColumnPaths = this.expandedDefaultColumns.map(i => i.path).join(',');

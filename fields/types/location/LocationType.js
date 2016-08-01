@@ -42,6 +42,7 @@ function location (list, path, options) {
 
 	location.super_.call(this, list, path, options);
 }
+location.properName = 'Location';
 util.inherits(location, FieldType);
 
 /**
@@ -109,9 +110,8 @@ location.prototype.addToSchema = function () {
 	// see http://stackoverflow.com/questions/16388836/does-applying-a-2dsphere-index-on-a-mongoose-schema-force-the-location-field-to
 	schema.pre('save', function (next) {
 		var obj = field._path.get(this);
-		if (Array.isArray(obj.geo) && (obj.geo.length !== 2 || (obj.geo[0] === null && obj.geo[1] === null))) {
-			obj.geo = undefined;
-		}
+		var geo = (obj.geo || []).map(Number).filter(_.isFinite);
+		obj.geo = (geo.length === 2) ? geo : undefined;
 		next();
 	});
 

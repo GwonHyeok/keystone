@@ -1,6 +1,6 @@
 import React from 'react';
-import { findDOMNode } from 'react-dom';
 import moment from 'moment';
+import assign from 'object-assign';
 import {
 	Button,
 	Col,
@@ -11,10 +11,10 @@ import {
 	Row,
 	Spinner,
 } from 'elemental';
+import { Fields } from 'FieldTypes';
 
 import AlertMessages from '../../../shared/AlertMessages';
 import ConfirmationDialog from './../../../shared/ConfirmationDialog';
-import Fields from 'FieldTypes';
 
 import FormHeading from './FormHeading';
 import AltText from './AltText';
@@ -44,14 +44,14 @@ var EditForm = React.createClass({
 	},
 	getInitialState () {
 		return {
-			values: Object.assign({}, this.props.data.fields),
+			values: assign({}, this.props.data.fields),
 			confirmationDialog: null,
 			loading: false,
 			lastValues: null, // used for resetting
 		};
 	},
 	getFieldProps (field) {
-		const props = Object.assign({}, field);
+		const props = assign({}, field);
 		const alerts = this.state.alerts;
 		// Display validation errors inline
 		if (alerts && alerts.error && alerts.error.error === 'validation errors') {
@@ -69,7 +69,7 @@ var EditForm = React.createClass({
 		return props;
 	},
 	handleChange (event) {
-		const values = Object.assign({}, this.state.values);
+		const values = assign({}, this.state.values);
 
 		values[event.path] = event.value;
 		this.setState({ values });
@@ -89,7 +89,7 @@ var EditForm = React.createClass({
 	},
 	handleReset () {
 		this.setState({
-			values: Object.assign({}, this.state.lastValues || this.props.data.fields),
+			values: assign({}, this.state.lastValues || this.props.data.fields),
 			confirmationDialog: null,
 		});
 	},
@@ -110,7 +110,7 @@ var EditForm = React.createClass({
 		this.props.dispatch(deleteItem(data.id, this.props.router));
 	},
 	handleKeyFocus () {
-		const input = findDOMNode(this.refs.keyOrIdInput);
+		const input = this.refs.keyOrIdInput;
 		input.select();
 	},
 	removeConfirmationDialog () {
@@ -259,7 +259,7 @@ var EditForm = React.createClass({
 				key="save"
 				type="primary"
 				disabled={this.state.loading}
-				onClick={() => this.updateItem()}
+				onClick={this.updateItem}
 			>
 				{this.state.loading ? (
 					<span>
@@ -354,13 +354,11 @@ var EditForm = React.createClass({
 	},
 	render () {
 		return (
-			<form ref="editForm" method="post" encType="multipart/form-data" className="EditForm-container">
+			<form ref="editForm" className="EditForm-container">
 				{(this.state.alerts) ? <AlertMessages alerts={this.state.alerts} /> : null}
 				<Row>
 					<Col lg="3/4">
 						<Form type="horizontal" className="EditForm" component="div">
-							<input type="hidden" name="action" value="updateItem" />
-							<input type="hidden" name={Keystone.csrf.key} value={Keystone.csrf.value} />
 							{this.renderNameField()}
 							{this.renderKeyOrId()}
 							{this.renderFormElements()}

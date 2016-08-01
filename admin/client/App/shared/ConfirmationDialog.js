@@ -3,19 +3,9 @@
  */
 
 import React, { Component, PropTypes } from 'react';
-import { findDOMNode } from 'react-dom';
 import { Modal, ModalBody, ModalFooter, Button } from 'elemental';
 
 class ConfirmationDialog extends Component {
-	componentWillReceiveProps (nextProps) {
-		// Focus the cancel button when the confirmation dialog is opened
-		if (nextProps.isOpen) {
-			setTimeout(() => {
-				const cancel = findDOMNode(this.refs.cancel);
-				cancel.focus();
-			}, 0);
-		}
-	}
 	getBodyHtml () {
 		return {
 			__html: this.props.body,
@@ -33,19 +23,17 @@ class ConfirmationDialog extends Component {
 
 		return (
 			<Modal
+				backdropClosesModal
+				isOpen={isOpen}
 				onCancel={onCancel}
 				width={400}
-				isOpen={isOpen}
-				backdropClosesModal
 			>
-				<ModalBody>
-					<div dangerouslySetInnerHTML={this.getBodyHtml()} />
-				</ModalBody>
+				<ModalBody dangerouslySetInnerHTML={this.getBodyHtml()} />
 				<ModalFooter>
-					<Button size="sm" type={confirmationType} onClick={onConfirmation}>
+					<Button autoFocus size="sm" type={confirmationType} onClick={onConfirmation}>
 						{confirmationLabel}
 					</Button>
-					<Button ref="cancel" size="sm" type="link-cancel" onClick={onCancel}>
+					<Button size="sm" type="link-cancel" onClick={onCancel}>
 						{cancelLabel}
 					</Button>
 				</ModalFooter>
@@ -63,7 +51,7 @@ ConfirmationDialog.propTypes = {
 };
 ConfirmationDialog.defaultProps = {
 	cancelLabel: 'Cancel',
-	confirmationLabel: 'Ok',
+	confirmationLabel: 'Okay',
 	confirmationType: 'danger',
 	isOpen: false,
 };

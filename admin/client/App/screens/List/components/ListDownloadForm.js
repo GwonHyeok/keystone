@@ -1,4 +1,5 @@
 import React from 'react';
+import assign from 'object-assign';
 import Popout from '../../../shared/Popout';
 import PopoutList from '../../../shared/Popout/PopoutList';
 import { Button, Checkbox, Form, FormField, InputGroup, SegmentedControl } from 'elemental';
@@ -42,7 +43,7 @@ var ListDownloadForm = React.createClass({
 		});
 	},
 	toggleColumn (column, value) {
-		const newColumns = Object.assign({}, this.state.selectedColumns);
+		const newColumns = assign({}, this.state.selectedColumns);
 		if (value) {
 			newColumns[column] = value;
 		} else {
@@ -114,7 +115,7 @@ var ListDownloadForm = React.createClass({
 								<SegmentedControl equalWidthSegments options={FORMAT_OPTIONS} value={this.state.format} onChange={this.changeFormat} />
 							</FormField>
 							<FormField label="Columns:">
-								<Checkbox autofocus label="Use currently selected" onChange={this.toggleCurrentlySelectedColumns} value checked={useCurrentColumns} />
+								<Checkbox autoFocus label="Use currently selected" onChange={this.toggleCurrentlySelectedColumns} value checked={useCurrentColumns} />
 							</FormField>
 							{this.renderColumnSelect()}
 						</Form>

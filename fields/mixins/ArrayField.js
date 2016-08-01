@@ -1,5 +1,5 @@
 var React = require('react');
-var ReactDOM = require('react-dom');
+import { findDOMNode } from 'react-dom';
 
 var Button = require('elemental').Button;
 var FormField = require('elemental').FormField;
@@ -20,7 +20,7 @@ function reduceValues (values) {
 module.exports = {
 	getInitialState: function () {
 		return {
-			values: Array.isArray(this.props.value) ? this.props.value.map(newItem) : this.props.value,
+			values: Array.isArray(this.props.value) ? this.props.value.map(newItem) : [],
 		};
 	},
 
@@ -38,7 +38,7 @@ module.exports = {
 			values: newValues,
 		}, () => {
 			if (!this.state.values.length) return;
-			ReactDOM.findDOMNode(this.refs['item_' + this.state.values.length]).focus();
+			findDOMNode(this.refs['item_' + this.state.values.length]).focus();
 		});
 		this.valueChanged(reduceValues(newValues));
 	},
@@ -48,7 +48,7 @@ module.exports = {
 		this.setState({
 			values: newValues,
 		}, function () {
-			ReactDOM.findDOMNode(this.refs.button).focus();
+			findDOMNode(this.refs.button).focus();
 		});
 		this.valueChanged(reduceValues(newValues));
 	},

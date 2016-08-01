@@ -14,6 +14,7 @@ function boolean (list, path, options) {
 	this.indent = (options.indent) ? true : false;
 	boolean.super_.call(this, list, path, options);
 }
+boolean.properName = 'Boolean';
 util.inherits(boolean, FieldType);
 
 boolean.prototype.defaults = {
@@ -73,6 +74,9 @@ boolean.prototype.inputIsValid = function (data, required) {
  */
 boolean.prototype.updateItem = function (item, data, callback) {
 	var value = this.getValueFromData(data);
+	if (typeof value === 'undefined') {
+		return process.nextTick(callback);
+	}
 	if (!value || value === 'false') {
 		if (item.get(this.path) !== false) {
 			item.set(this.path, false);
