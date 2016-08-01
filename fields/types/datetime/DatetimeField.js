@@ -99,27 +99,47 @@ module.exports = Field.create({
 	},
 
 	renderUI () {
+		let props = {
+			path: this.props.path,
+			paths: {
+				date: this.props.path,
+				time: this.props.path,
+				tzOffset: this.props.path
+			}
+		};
+
+		if (this.props.nested) {
+			props.paths.date = this.props.nested + '.' + this.props.path + '_' + this.props._id
+			props.paths.time = this.props.nested + '.' + this.props.path + '_' + this.props._id
+			props.paths.tzOffset = this.props.nested + '.' + this.props.path + '_' + this.props._id
+			props.path = this.props.nested + '.' + this.props.path + '_' + this.props._id
+		}
+
+		props.paths.date += ('_date');
+		props.paths.time += ('_time');
+		props.paths.tzOffset += ('_tzOffset');
+
 		var input;
 		if (this.shouldRenderField()) {
 			input = (
 				<InputGroup>
 					<InputGroup.Section grow>
-						<DateInput ref="dateInput" name={this.props.paths.date} value={this.state.dateValue} format={this.dateInputFormat} onChange={this.dateChanged} />
+						<DateInput ref="dateInput" name={props.paths.date} value={this.state.dateValue} format={this.dateInputFormat} onChange={this.dateChanged} />
 					</InputGroup.Section>
 					<InputGroup.Section grow>
-						<FormInput name={this.props.paths.time} value={this.state.timeValue} placeholder="HH:MM:SS am/pm" onChange={this.timeChanged} autoComplete="off" />
+						<FormInput name={props.paths.time} value={this.state.timeValue} placeholder="HH:MM:SS am/pm" onChange={this.timeChanged} autoComplete="off" />
 					</InputGroup.Section>
 					<InputGroup.Section>
 						<Button onClick={this.setNow}>Now</Button>
 					</InputGroup.Section>
-					<input type="hidden" name={this.props.paths.tzOffset} value={this.state.tzOffsetValue} />
+					<input type="hidden" name={props.paths.tzOffset} value={this.state.tzOffsetValue} />
 				</InputGroup>
 			);
 		} else {
 			input = <FormInput noedit>{this.format(this.props.value, this.props.formatString)}</FormInput>;
 		}
 		return (
-			<FormField label={this.props.label} className="field-type-datetime" htmlFor={this.props.path}>
+			<FormField label={this.props.label} className="field-type-datetime" htmlFor={props.path}>
 				{input}
 				{this.renderNote()}
 			</FormField>

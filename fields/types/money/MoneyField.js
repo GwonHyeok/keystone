@@ -1,6 +1,6 @@
-import { FormInput } from 'elemental';
+import {FormInput} from 'elemental';
 import Field from '../Field';
-import React, { PropTypes } from 'react';
+import React, {PropTypes} from 'react';
 
 module.exports = Field.create({
 	displayName: 'MoneyField',
@@ -23,10 +23,16 @@ module.exports = Field.create({
 		});
 	},
 	renderField () {
+		var props = {
+			name: this.props.path,
+		};
+
+		if (this.props.nested) props.name = this.props.nested + '.' + props.name + '_' + this.props._id;
+
 		return (
 			<FormInput
 				autoComplete="off"
-				name={this.props.path}
+				name={props.name}
 				onChange={this.valueChanged}
 				ref="focusTarget"
 				value={this.props.value}
