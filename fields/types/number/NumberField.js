@@ -25,7 +25,7 @@ module.exports = Field.create({
 
 		return (
 			<FormInput
-				name={props.name}
+				name={this.getInputName(props.name)}
 				ref="focusTarget"
 				value={this.props.value}
 				onChange={this.valueChanged}
