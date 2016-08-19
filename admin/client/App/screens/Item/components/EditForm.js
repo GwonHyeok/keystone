@@ -172,19 +172,13 @@ var EditForm = React.createClass({
 			return (
 				<div className={className}>
 					<AltText
-						component="span"
-						modifiedLabel="ID:"
-						modifiedValue={null}
-						normalLabel={`${upcase(list.autokey.path)}: `}
-						normalValue={null}
+						modified="ID:"
+						normal={`${upcase(list.autokey.path)}: `}
 						title="Press <alt> to reveal the ID"
 						className="EditForm__key-or-id__label" />
 					<AltText
-						component="span"
-						modifiedLabel=""
-						modifiedValue={<input ref="keyOrIdInput" onFocus={this.handleKeyFocus} value={this.props.data.id} className="EditForm__key-or-id__input" readOnly />}
-						normalLabel={null}
-						normalValue={<input ref="keyOrIdInput" onFocus={this.handleKeyFocus} value={this.props.data[list.autokey.path]} className="EditForm__key-or-id__input" readOnly />}
+						modified={<input ref="keyOrIdInput" onFocus={this.handleKeyFocus} value={this.props.data.id} className="EditForm__key-or-id__input" readOnly />}
+						normal={<input ref="keyOrIdInput" onFocus={this.handleKeyFocus} value={this.props.data[list.autokey.path]} className="EditForm__key-or-id__input" readOnly />}
 						title="Press <alt> to reveal the ID"
 						className="EditForm__key-or-id__field" />
 				</div>
@@ -278,17 +272,18 @@ var EditForm = React.createClass({
 						disabled={loading}
 						loading={loading}
 						onClick={this.updateItem}
+						data-button="update"
 					>
 						{loadingButtonText}
 					</LoadingButton>
-					<Button disabled={loading} onClick={this.confirmReset} variant="link" color="cancel">
+					<Button disabled={loading} onClick={this.confirmReset} variant="link" color="cancel" data-button="reset">
 						<ResponsiveText
 							hiddenXS="reset changes"
 							visibleXS="reset"
 						/>
 					</Button>
 					{!this.props.list.nodelete && (
-						<Button disabled={loading} onClick={this.confirmDelete} variant="link" color="delete" style={styles.deleteButton}>
+						<Button disabled={loading} onClick={this.confirmDelete} variant="link" color="delete" style={styles.deleteButton} data-button="delete">
 							<ResponsiveText
 								hiddenXS={`delete ${this.props.list.singular.toLowerCase()}`}
 								visibleXS="delete"
